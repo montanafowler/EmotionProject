@@ -1,4 +1,4 @@
-#!/Library/Frameworks/Python.framework/Versions/3.6/bin/python3.6
+#!c:\users\mocfowle\appdata\local\programs\python\python38\python.exe
 # querycsv.py
 #
 # Purpose:
@@ -46,7 +46,6 @@ import os.path
 import getopt
 import csv
 import sqlite3
-from functools import reduce
 
 _version = "0.3.0.0"
 _vdate = "2008-02-23"
@@ -114,7 +113,8 @@ def pp(cursor):
     rows = [names, sep] + [' '+' | '.join(
             [str(rows[i][j]).ljust(maxen[j])
             for j in rcols] ) for i in rrows]
-    return '\n'.join(rows)+(len(rows)==2 and '\n no row selected\n' or '\n')
+    return '\n'.join(rows)+(
+           len(rows)==2 and '\n no row selected\n' or '\n')
 
 def read_sqlfile( fn ):
 	"""Open the text file with the specified name, read it, and return a list of
@@ -146,7 +146,7 @@ def execsql( db, sqllist, outfile=None ):
 
 def csv_to_sqldb(sqldb, infilename, table_name):
 	dialect = csv.Sniffer().sniff(open(infilename, "rt").readline())
-	inf = csv.reader(open(infilename, "rt"), dialect)
+	inf = csv.reader(open(infilename, "rt", encoding="utf8"), dialect)
 	column_names = next(inf)
 	colstr = ",".join(column_names)
 	try:
@@ -154,6 +154,7 @@ def csv_to_sqldb(sqldb, infilename, table_name):
 	except:
 		pass
 	sqldb.execute("create table %s (%s);" % (table_name, colstr))
+	print("inf: " + str(inf))
 	for l in inf:
 		sql = "insert into %s values (%s);" % (table_name, quote_list_as_str(l))
 		sqldb.execute(sql)
@@ -164,7 +165,7 @@ def qsqldb( sqldb, sql_cmd, outfilename=None  ):
 	#
 	# Create the output file if specified
 	if outfilename:
-		outfile = open(outfilename, "w")
+		outfile = open(outfilename, "w", encoding="utf8")
 		csvout = csv.writer(outfile, quoting=csv.QUOTE_NONNUMERIC)
 	#
 	# Execute SQL
@@ -180,7 +181,7 @@ def qsqldb( sqldb, sql_cmd, outfilename=None  ):
 			csvout.writerow(list(row))
 		outfile.close()
 	else:
-		print(pp(curs))
+		print (pp(curs))
 
 def qsqlite( sql_cmd, sqlfilename=None, outfilename=None ):
 	"""Run a SQL command on a sqlite database in the specified file (or in memory if sqlfilename is None)."""

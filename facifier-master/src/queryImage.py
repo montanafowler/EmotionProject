@@ -16,17 +16,17 @@ import os
 #happy art - we can select a random painting from the first 1/3 or so and then increment in facifier indices for each emotion
 os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o happyArt.csv \"select ImageURL, Title, Artist, Year, happy from WikiArtEmotionsAllEdited where CAST(happy AS float)>0.5 ORDER BY CAST(happy AS float) DESC;\"")
 #sad art
-#os.system("py ./querycsv.py -i WikiArtEmotionsAllEdited.csv -o sadArt.csv \"select ImageURL, Title, Artist, Year, sad from WikiArtEmotionsAllEdited where CAST(sad AS float)>0.5 ORDER BY CAST(sad AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o sadArt.csv \"select ImageURL, Title, Artist, Year, sad from WikiArtEmotionsAllEdited where CAST(sad AS float)>0.5 ORDER BY CAST(sad AS float) DESC;\"")
 #neutral art
-#os.system("./querycsv.py -i WikiArtEmotionsAllEdited.csv -o neutralArt.csv \"select ImageURL, Title, Artist, Year, neutral from WikiArtEmotionsAllEdited where CAST(neutral AS float)>0.5 ORDER BY CAST(neutral AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o neutralArt.csv \"select ImageURL, Title, Artist, Year, neutral from WikiArtEmotionsAllEdited where CAST(neutral AS float)>0.5 ORDER BY CAST(neutral AS float) DESC;\"")
 #angry art
-#os.system("./querycsv.py -i WikiArtEmotionsAllEdited.csv -o angryArt.csv \"select ImageURL, Title, Artist, Year, angry from WikiArtEmotionsAllEdited where CAST(angry AS float)>0.5 ORDER BY CAST(angry AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o angryArt.csv \"select ImageURL, Title, Artist, Year, angry from WikiArtEmotionsAllEdited where CAST(angry AS float)>0.5 ORDER BY CAST(angry AS float) DESC;\"")
 #surprised art
-#os.system("./querycsv.py -i WikiArtEmotionsAllEdited.csv -o surprisedArt.csv \"select ImageURL, Title, Artist, Year, surprised from WikiArtEmotionsAllEdited where CAST(surprised AS float)>0.5 ORDER BY CAST(surprised AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o surprisedArt.csv \"select ImageURL, Title, Artist, Year, surprised from WikiArtEmotionsAllEdited where CAST(surprised AS float)>0.5 ORDER BY CAST(surprised AS float) DESC;\"")
 #afraid art
-#os.system("./querycsv.py -i WikiArtEmotionsAllEdited.csv -o afraidArt.csv \"select ImageURL, Title, Artist, Year, afraid from WikiArtEmotionsAllEdited where CAST(afraid AS float)>0.5 ORDER BY CAST(afraid AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o afraidArt.csv \"select ImageURL, Title, Artist, Year, afraid from WikiArtEmotionsAllEdited where CAST(afraid AS float)>0.5 ORDER BY CAST(afraid AS float) DESC;\"")
 #disgust art
-#os.system("./querycsv.py -i WikiArtEmotionsAllEdited.csv -o disgustArt.csv \"select ImageURL, Title, Artist, Year, disgust from WikiArtEmotionsAllEdited where CAST(disgust AS float)>0.5 ORDER BY CAST(disgust AS float) DESC;\"")
+os.system("querycsv.py -i WikiArtEmotionsAllEdited.csv -o disgustArt.csv \"select ImageURL, Title, Artist, Year, disgust from WikiArtEmotionsAllEdited where CAST(disgust AS float)>0.5 ORDER BY CAST(disgust AS float) DESC;\"")
 
 file = open("emotions_temp.txt", "r")
 emotions = []

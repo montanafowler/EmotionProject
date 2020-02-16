@@ -62,7 +62,7 @@
     <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
 
 
-
+    <h4>1. Upload Image</h4>
     <div id="drop-area">
         <form class="my-form">
             <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p>
@@ -72,8 +72,14 @@
     </div>
     <div id="gallery"></div>
     <progress id="progress-bar" max=100 value=0></progress>
+    <h4>2. Detect Emotions</h4>
+    <div id="emotionsDetected">emotions detected image</div>
 
+    <h4>3. Provide Art associated with your emotions</h4>
+    <div id="emotionalArt">emotional art div</div>
 
+    <h4>4. Provide Tweet associated with your emotions</h4>
+    <div id="tweet">tweet div</div>
 
     <script>
         let filesDone = 0
@@ -125,29 +131,29 @@
 
 
         function uploadFile(file, i) { // <- Add `i` parameter
-          var url = 'https:\\localhost:800\\index.html'
-          var xhr = new XMLHttpRequest()
-          var formData = new FormData()
-          xhr.open('POST', url, true)
+            var url = 'https:\\localhost:800\\index.html'
+            var xhr = new XMLHttpRequest()
+            var formData = new FormData()
+            xhr.open('POST', url, true)
 
-          // Add following event listener
-          xhr.upload.addEventListener("progress", function(e) {
-            updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
-          })
+            // Add following event listener
+            xhr.upload.addEventListener("progress", function (e) {
+                updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
+            })
 
-          xhr.addEventListener('readystatechange', function(e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-              // Done. Inform the user
-                console.log("done0")
-            }
-            else if (xhr.readyState == 4 && xhr.status != 200) {
-              // Error. Inform the user
-                console.log("error0")
-            }
-          })
+            xhr.addEventListener('readystatechange', function (e) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Done. Inform the user
+                    console.log("done0")
+                }
+                else if (xhr.readyState == 4 && xhr.status != 200) {
+                    // Error. Inform the user
+                    console.log("error0")
+                }
+            })
 
-          formData.append('file', file)
-          xhr.send(formData)
+            formData.append('file', file)
+            xhr.send(formData)
         }
 
 
@@ -162,29 +168,29 @@
         }
 
         function initializeProgress(numfiles) {
-          progressBar.value = 0
-          filesDone = 0
-          filesToDo = numfiles
+            progressBar.value = 0
+            filesDone = 0
+            filesToDo = numfiles
         }
 
         function progressDone() {
-          filesDone++
-          progressBar.value = filesDone / filesToDo * 100
+            filesDone++
+            progressBar.value = filesDone / filesToDo * 100
         }
 
         function initializeProgress(numFiles) {
-          progressBar.value = 0
-          uploadProgress = []
+            progressBar.value = 0
+            uploadProgress = []
 
-          for(let i = numFiles; i > 0; i--) {
-            uploadProgress.push(0)
-          }
+            for (let i = numFiles; i > 0; i--) {
+                uploadProgress.push(0)
+            }
         }
 
         function updateProgress(fileNumber, percent) {
-          uploadProgress[fileNumber] = percent
-          let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
-          progressBar.value = total
+            uploadProgress[fileNumber] = percent
+            let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
+            progressBar.value = total
         }
 
 

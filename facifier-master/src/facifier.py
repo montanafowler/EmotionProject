@@ -69,11 +69,15 @@ if __name__ == '__main__':
     emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
 
     # Load model
+    print("load model 0")
     fisher_face_emotion = cv2.face.FisherFaceRecognizer_create()
+    print("load model 1")
     fisher_face_emotion.read('models/emotion_classifier_model.xml')
-
+    print("load model 2")
     fisher_face_gender = cv2.face.FisherFaceRecognizer_create()
+    print("load model 3")
     fisher_face_gender.read('models/gender_classifier_model.xml')
+    print("load model 4")
 
     # Use model to predict
     choice = input("Use webcam?(y/n) ")

@@ -5,6 +5,10 @@ import argparse
 
 from cv2 import WINDOW_NORMAL
 from face_detection import find_faces
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
 
 ESC = 27
 

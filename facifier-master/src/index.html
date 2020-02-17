@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <h1>Emotion Project</h1>
+    <h1>Emotion Project index.html in src folder</h1>
     <h2>by Tessa Eagle, John Diez, and Montana Fowler</h2>
     <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
 
@@ -39,13 +39,17 @@
             });
             console.log("formElements: " + formElements);
 
-            var urlString = "/facifier-master/src/facifier.py --image " + formElements[0];
+            var urlString = ".\facifier.py" //--image " + formElements[0];
             console.log("urlString: " + urlString)
             var jqXHR = $.ajax({
                 type: "GET",
                 url: urlString,
                 async: false,
-                data: { mydata: input }
+                data: { mydata: input },
+                success: function(response) {
+                    // here you do whatever you want with the response variable
+                    console.log("success function")
+                }
             });
 
             return jqXHR.responseText;

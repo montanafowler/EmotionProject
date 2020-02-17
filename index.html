@@ -89,13 +89,13 @@
             });
             console.log("formElements: " + formElements);
 
-            var urlString = "/facifier-master/src/facifier.py --image " + formElements[0];
+            var urlString = ".\\facifier-master\\src\\facifier.py"// --image " + formElements[0];
             console.log("urlString: " + urlString)
             var jqXHR = $.ajax({
                 type: "GET",
                 url: urlString,
                 async: false,
-                data: { mydata: input }
+                data: { image: formElements[0] }
             });
 
             return jqXHR.responseText;

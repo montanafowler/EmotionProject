@@ -5,7 +5,7 @@ import argparse
 
 from cv2 import WINDOW_NORMAL
 from face_detection import find_faces
-from flask import Flask
+from flask import Flask, request
 from markupsafe import escape
 from flask import render_template
 app = Flask(__name__)
@@ -75,19 +75,27 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
     #if key == ESC:
         #cv2.destroyWindow(window_name)
 
-#@app.route('/facifier/image/<imageName>')
-@app.route('/facifier/')
-@app.route('/facifier/<imageName>')
+#@app.route('/facifier/')
+def initializeHomePage():
+    return render_template("index.html")
+
+
+#@app.route('/facifier/image/<imageName>', methods='POST')
 #if __name__ == '__main__':
-def startFacifer(imageName='angry.jpg'):
-    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
-    print("start of startFacifier")
-   # parser = argparse.ArgumentParser(description='A tutorial of argparse!')
-   # parser.add_argument("--image", required=True, type=str, help="imageFilepath")
+#@app.route('/facifier/image/<imageName>')
+@app.route('/startFacifier', methods=['GET','POST'])
+def startFacifier():
+    # if we are initializing the page, just return the html
+    if request.method == 'GET':
+        return render_template("index.html")
 
-   # args = parser.parse_args()
-   # print(args)
-
+    # if we have received an image name then save it
+    imageName = request.form['imageNameInput']
+    print("imageName: " + str(imageName))
+    
+    # the possible emotions we could detect
+    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]    
+    
     # Load model
     fisher_face_emotion = cv2.face.FisherFaceRecognizer_create()
     fisher_face_emotion.read('models/emotion_classifier_model.xml')
@@ -101,7 +109,7 @@ def startFacifer(imageName='angry.jpg'):
         window_name = "Facifier Webcam (press ESC to exit)"
         start_webcam(fisher_face_emotion, fisher_face_gender, window_size=(1280, 720), window_name=window_name, update_time=15)
     elif (choice == 'n'):
-        run_loop = True #True
+        run_loop = True
         window_name = "Facifier Static (press ESC to exit)"
         print("Default path is set to data/sample/")
         #print("Type q or quit to end program")

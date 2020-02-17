@@ -7,17 +7,21 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
-    
+
     <h1>Emotion Project index.html in src folder</h1>
     <h2>by Tessa Eagle, John Diez, and Montana Fowler</h2>
     <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
 
     <h4>1. Upload Image</h4>
-    <form action="">
+    <form action="\facifier\image\">
         <label for="myfile">Select a file:</label>
         <input type="file" id="myfile" name="myfile"><br><br>
         <input type="submit">
     </form>
+    <form action={{ url_for('startFacifier') }} method="post">
+         <input type="text" name="imageNameInput">
+         <input type="submit">
+     </form>
 
     <script>
         var formElements = new Array();
@@ -46,7 +50,7 @@
                 url: urlString,
                 async: false,
                 data: { mydata: input },
-                success: function(response) {
+                success: function (response) {
                     // here you do whatever you want with the response variable
                     console.log("success function")
                 }

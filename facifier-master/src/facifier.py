@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os.path
+import argparse
 
 from cv2 import WINDOW_NORMAL
 from face_detection import find_faces
@@ -68,6 +69,13 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
 if __name__ == '__main__':
     emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
 
+    
+    parser = argparse.ArgumentParser(description='A tutorial of argparse!')
+    parser.add_argument("--image", required=True, type=str, help="imageFilepath")
+
+    args = parser.parse_args()
+    print(args)
+
     # Load model
     print("load model 0")
     fisher_face_emotion = cv2.face.FisherFaceRecognizer_create()
@@ -80,18 +88,20 @@ if __name__ == '__main__':
     print("load model 4")
 
     # Use model to predict
-    choice = input("Use webcam?(y/n) ")
+    #choice = input("Use webcam?(y/n) ")
+    choice = 'n'
     if (choice == 'y'):
         window_name = "Facifier Webcam (press ESC to exit)"
         start_webcam(fisher_face_emotion, fisher_face_gender, window_size=(1280, 720), window_name=window_name, update_time=15)
     elif (choice == 'n'):
-        run_loop = True
+        run_loop = True #True
         window_name = "Facifier Static (press ESC to exit)"
         print("Default path is set to data/sample/")
         print("Type q or quit to end program")
         while run_loop:
+            run_loop = False
             path = "../data/sample/"
-            file_name = input("Specify image file: ")
+            file_name = args.image
             if file_name == "q" or file_name == "quit":
                 run_loop = False
             else:

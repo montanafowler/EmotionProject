@@ -6,9 +6,11 @@ import argparse
 from cv2 import WINDOW_NORMAL
 from face_detection import find_faces
 from flask import Flask
+from markupsafe import escape
+from flask import render_template
 app = Flask(__name__)
 
-@app.route('/')
+
 
 ESC = 27
 
@@ -47,11 +49,12 @@ def start_webcam(model_emotion, model_gender, window_size, window_name='live', u
     cv2.destroyWindow(window_name)
 
 def analyze_picture(file_name, model_emotion, model_gender, path, window_size, window_name='static'):
-    cv2.namedWindow(window_name, WINDOW_NORMAL)
-    cv2.namedWindow(window_name, WINDOW_NORMAL)
-    if window_size:
-        width, height = window_size
-        cv2.resizeWindow(window_name, width, height)
+    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
+    #cv2.namedWindow(window_name, WINDOW_NORMAL)
+    #cv2.namedWindow(window_name, WINDOW_NORMAL)
+    #if window_size:
+        #width, height = window_size
+        #cv2.resizeWindow(window_name, width, height)
 
     image = cv2.imread(path, 1)
     for normalized_face, (x, y, w, h) in find_faces(image):
@@ -62,34 +65,34 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
         else:
             cv2.rectangle(image, (x,y), (x+w, y+h), (255,0,0), 2)
         cv2.putText(image, emotions[emotion_prediction[0]], (x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 2)
-    cv2.imshow(window_name, image)
+    #cv2.imshow(window_name, image)
+    print("showed image")
     savedImgPath = "../data/sample/output/"
     savedImgPath += file_name
     cv2.imwrite(savedImgPath, image)
-    key = cv2.waitKey(0)
-    if key == ESC:
-        cv2.destroyWindow(window_name)
+    print("wrote image to " + savedImgPath)
+    #key = cv2.waitKey(0)
+    #if key == ESC:
+        #cv2.destroyWindow(window_name)
 
-if __name__ == '__main__':
+#@app.route('/facifier/image/<imageName>')
+@app.route('/facifier/')
+@app.route('/facifier/<imageName>')
+#if __name__ == '__main__':
+def startFacifer(imageName='angry.jpg'):
     emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
+    print("start of startFacifier")
+   # parser = argparse.ArgumentParser(description='A tutorial of argparse!')
+   # parser.add_argument("--image", required=True, type=str, help="imageFilepath")
 
-    
-    parser = argparse.ArgumentParser(description='A tutorial of argparse!')
-    parser.add_argument("--image", required=True, type=str, help="imageFilepath")
-
-    args = parser.parse_args()
-    print(args)
+   # args = parser.parse_args()
+   # print(args)
 
     # Load model
-    print("load model 0")
     fisher_face_emotion = cv2.face.FisherFaceRecognizer_create()
-    print("load model 1")
     fisher_face_emotion.read('models/emotion_classifier_model.xml')
-    print("load model 2")
     fisher_face_gender = cv2.face.FisherFaceRecognizer_create()
-    print("load model 3")
     fisher_face_gender.read('models/gender_classifier_model.xml')
-    print("load model 4")
 
     # Use model to predict
     #choice = input("Use webcam?(y/n) ")
@@ -101,19 +104,22 @@ if __name__ == '__main__':
         run_loop = True #True
         window_name = "Facifier Static (press ESC to exit)"
         print("Default path is set to data/sample/")
-        print("Type q or quit to end program")
+        #print("Type q or quit to end program")
         while run_loop:
             run_loop = False
             path = "../data/sample/"
-            file_name = args.image
+            file_name = imageName
             if file_name == "q" or file_name == "quit":
                 run_loop = False
             else:
                 path += file_name
+                print("path to image: " + path)
                 if os.path.isfile(path):
+                    print("calling analyze picture")
                     analyze_picture(file_name, fisher_face_emotion, fisher_face_gender, path, window_size=(1280, 720), window_name=window_name)
                 else:
                     print("File not found!")
     else:
         print("Invalid input, exiting program.")
+    return render_template("index.html")
 

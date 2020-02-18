@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Emotion Project</title>
+    <title>Your face Your emotion Your art Your tweet Your truth </title>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
@@ -31,9 +31,11 @@
 
     </style>
 
-    <h1>Emotion Project</h1>
+    <h1>Your face Your emotion Your art Your tweet Your truth </h1>
+    <h4>(sad art for sad people)</h4>
     <h2>by Tessa Eagle, John Diez, and Montana Fowler</h2>
     <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
+
 
     <h4>1. Upload Image</h4>
     <form action={{ url_for('startFacifier') }} method="post">
@@ -57,7 +59,7 @@
 
         
         <div id="tweet" class="imageDiv">
-            <h4>4. Provide Tweet to compliment your emotions</h4>
+            <h4>4. Provide your Tweet for today</h4>
             <p id="tweetText" value="{{ text }}">{{ text }}</p>
         </div>
 

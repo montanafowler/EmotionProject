@@ -79,6 +79,11 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
     cv2.imwrite(savedOutputImgPath, image)
     print("wrote image to " + savedOutputImgPath)
     imagesToReturn = [savedOutputImgPath]
+
+    if len(emotionsDetected) == 0:
+        imagesToReturn.append("")
+        imagesToReturn.append("no emotion detected")
+        return imagesToReturn
     
     with open("dog_feelings_generatedTweets.txt", "r") as tweets:
         i = 0

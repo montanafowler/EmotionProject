@@ -81,8 +81,9 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
     
     for e in emotionsDetected:
         csvFilename = e + "Art.csv"
-        with open(csvFilename, newline='') as csvfile:
+        with open(csvFilename, newline='', encoding='utf8') as csvfile:
             reader = csv.DictReader(csvfile)
+            #print("INDEX_DICT[" + e + "] = " + INDEX_DICT[e])
             imgURL = list(reader)[INDEX_DICT[e]]["ImageURL"]
             print(imgURL)
             INDEX_DICT[e] += 1 #increment the index of the art

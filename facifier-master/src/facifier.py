@@ -10,6 +10,7 @@ from markupsafe import escape
 from flask import render_template
 app = Flask(__name__)
 import base64
+import random
 import csv
 
 
@@ -78,6 +79,33 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
     cv2.imwrite(savedOutputImgPath, image)
     print("wrote image to " + savedOutputImgPath)
     imagesToReturn = [savedOutputImgPath]
+    
+    with open("dog_feelings_generatedTweets.txt", "r") as tweets:
+        i = 0
+        text = tweets.read()
+        #text = text.replace('\n\n\n', "")
+        lines = text.split('\n')
+        #print(str(i) + "lines " + str(lines))
+        #print("line: " + line)
+        if INDEX_DICT['tweet'] == 0:
+            i = random.randint(0, 30)
+            INDEX_DICT['tweet'] = i
+        else:
+            i = INDEX_DICT['tweet']
+
+        while i < len(lines):
+            line = lines[i]
+            #print("line: " + line)
+            
+            i += 1
+            INDEX_DICT['tweet'] += 1
+            if len(line) > 0:
+                chosenLine = line
+                break
+        print("chosen line: " + chosenLine)
+        INDEX_DICT['tweet'] += 1
+        imagesToReturn.append(chosenLine)
+
     
     for e in emotionsDetected:
         csvFilename = e + "Art.csv"
@@ -149,16 +177,17 @@ def startFacifier():
                     imagesToReturn = analyze_picture(file_name, fisher_face_emotion, fisher_face_gender, path, window_size=(1280, 720), window_name=window_name)
                     #data = emotionsDetectedImg
                     #print("emotionsDetectedImg " + str(emotionsDetectedImg))
-                    
+                    text = imagesToReturn[1]
+                    print("TEXT " + text)
                     with open(imagesToReturn[0], "rb") as image_file:
                         img = image_file.read()
                         data = base64.b64encode(img)
-                    artImages = imagesToReturn[1:] #remove the output path
+                    artImages = imagesToReturn[2:] #remove the output path
                     print("imagesToReturn " + str(imagesToReturn))
                 else:
                     print("File not found!")
                     return render_template("index.html")
     else:
         print("Invalid input, exiting program.")
-    return render_template("index.html", data=data.decode('utf8'), artImages=artImages)
+    return render_template("index.html", data=data.decode('utf8'), artImages=artImages, text=text)
 

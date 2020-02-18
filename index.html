@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Emotion Project</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <style>
+        #drop-area {
+            border: 2px dashed #ccc;
+            border-radius: 20px;
+            width: 480px;
+            font-family: sans-serif;
+            margin: 100px auto;
+            padding: 20px;
+        }
+
+            #drop-area.highlight {
+                border-color: purple;
+            }
+
+        p {
+            margin-top: 0;
+        }
+
+        .my-form {
+            margin-bottom: 10px;
+        }
+
+        #gallery {
+            margin-top: 10px;
+        }
+
+            #gallery img {
+                width: 150px;
+                margin-bottom: 10px;
+                margin-right: 10px;
+                vertical-align: middle;
+            }
+
+        .button {
+            display: inline-block;
+            padding: 10px;
+            background: #ccc;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+            .button:hover {
+                background: #ddd;
+            }
+
+        #fileElem {
+            display: none;
+        }
+    </style>
+
+    <h1>Emotion Project</h1>
+    <h2>by Tessa Eagle, John Diez, and Montana Fowler</h2>
+    <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
+
+    <h4>1. Upload Image</h4>
+    <form action="">
+        <label for="myfile">Select a file:</label>
+        <input type="file" id="myfile" name="myfile"><br><br>
+        <input type="submit">
+    </form>
+
+    <script>
+        var formElements = new Array();
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+            formElements.push(value);
+        });
+        console.log("formElements: " + formElements);
+
+    </script>
+
+    <input id="submitbutton" type="submit" value="Test Send Data">
+    <!----------------------------------->
+    <script type="text/javascript">
+
+        function runPyScript(input) {
+            var formElements = new Array();
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                formElements.push(value);
+            });
+            console.log("formElements: " + formElements);
+
+            var urlString = ".\\facifier-master\\src\\facifier.py"// --image " + formElements[0];
+            console.log("urlString: " + urlString)
+            var jqXHR = $.ajax({
+                type: "GET",
+                url: urlString,
+                async: false,
+                data: { image: formElements[0] }
+            });
+
+            return jqXHR.responseText;
+        }
+
+        $('#submitbutton').click(function () {
+            datatosend = 'this is my matrix';
+            result = runPyScript(datatosend);
+            console.log('Got back ' + result);
+        });
+
+    </script>
+
+    <div id="gallery"></div>
+    <h4>2. Detect Emotions</h4>
+    <div id="emotionsDetected">emotions detected image</div>
+
+    <h4>3. Provide Art associated with your emotions</h4>
+    <div id="emotionalArt">emotional art div</div>
+
+    <h4>4. Provide Tweet associated with your emotions</h4>
+    <div id="tweet">tweet div</div>
+
+
+</body>
+</html>

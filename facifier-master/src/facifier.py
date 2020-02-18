@@ -1,9 +1,16 @@
 import cv2
 import numpy as np
 import os.path
+import argparse
 
 from cv2 import WINDOW_NORMAL
 from face_detection import find_faces
+from flask import Flask, request
+from markupsafe import escape
+from flask import render_template
+app = Flask(__name__)
+
+
 
 ESC = 27
 
@@ -42,11 +49,12 @@ def start_webcam(model_emotion, model_gender, window_size, window_name='live', u
     cv2.destroyWindow(window_name)
 
 def analyze_picture(file_name, model_emotion, model_gender, path, window_size, window_name='static'):
-    cv2.namedWindow(window_name, WINDOW_NORMAL)
-    cv2.namedWindow(window_name, WINDOW_NORMAL)
-    if window_size:
-        width, height = window_size
-        cv2.resizeWindow(window_name, width, height)
+    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
+    #cv2.namedWindow(window_name, WINDOW_NORMAL)
+    #cv2.namedWindow(window_name, WINDOW_NORMAL)
+    #if window_size:
+        #width, height = window_size
+        #cv2.resizeWindow(window_name, width, height)
 
     image = cv2.imread(path, 1)
     for normalized_face, (x, y, w, h) in find_faces(image):
@@ -57,26 +65,46 @@ def analyze_picture(file_name, model_emotion, model_gender, path, window_size, w
         else:
             cv2.rectangle(image, (x,y), (x+w, y+h), (255,0,0), 2)
         cv2.putText(image, emotions[emotion_prediction[0]], (x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 2)
-    cv2.imshow(window_name, image)
+    #cv2.imshow(window_name, image)
+    print("showed image")
     savedImgPath = "../data/sample/output/"
     savedImgPath += file_name
     cv2.imwrite(savedImgPath, image)
-    key = cv2.waitKey(0)
-    if key == ESC:
-        cv2.destroyWindow(window_name)
+    print("wrote image to " + savedImgPath)
+    #key = cv2.waitKey(0)
+    #if key == ESC:
+        #cv2.destroyWindow(window_name)
 
-if __name__ == '__main__':
-    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]
+#@app.route('/facifier/')
+def initializeHomePage():
+    return render_template("index.html")
 
+
+#@app.route('/facifier/image/<imageName>', methods='POST')
+#if __name__ == '__main__':
+#@app.route('/facifier/image/<imageName>')
+@app.route('/startFacifier', methods=['GET','POST'])
+def startFacifier():
+    # if we are initializing the page, just return the html
+    if request.method == 'GET':
+        return render_template("index.html")
+
+    # if we have received an image name then save it
+    imageName = request.form['imageNameInput']
+    print("imageName: " + str(imageName))
+    
+    # the possible emotions we could detect
+    emotions = ["afraid", "angry", "disgusted", "happy", "neutral", "sad", "surprised"]    
+    
     # Load model
     fisher_face_emotion = cv2.face.FisherFaceRecognizer_create()
     fisher_face_emotion.read('models/emotion_classifier_model.xml')
-
     fisher_face_gender = cv2.face.FisherFaceRecognizer_create()
     fisher_face_gender.read('models/gender_classifier_model.xml')
 
     # Use model to predict
-    choice = input("Use webcam?(y/n) ")
+    #choice = input("Use webcam?(y/n) ")
+    choice = 'n'
     if (choice == 'y'):
         window_name = "Facifier Webcam (press ESC to exit)"
         start_webcam(fisher_face_emotion, fisher_face_gender, window_size=(1280, 720), window_name=window_name, update_time=15)
@@ -84,18 +112,22 @@ if __name__ == '__main__':
         run_loop = True
         window_name = "Facifier Static (press ESC to exit)"
         print("Default path is set to data/sample/")
-        print("Type q or quit to end program")
+        #print("Type q or quit to end program")
         while run_loop:
+            run_loop = False
             path = "../data/sample/"
-            file_name = input("Specify image file: ")
+            file_name = imageName
             if file_name == "q" or file_name == "quit":
                 run_loop = False
             else:
                 path += file_name
+                print("path to image: " + path)
                 if os.path.isfile(path):
+                    print("calling analyze picture")
                     analyze_picture(file_name, fisher_face_emotion, fisher_face_gender, path, window_size=(1280, 720), window_name=window_name)
                 else:
                     print("File not found!")
     else:
         print("Invalid input, exiting program.")
+    return render_template("index.html")
 

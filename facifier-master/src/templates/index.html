@@ -7,72 +7,35 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
+    <style>
+        img {
+            width: 40%;
+            height: auto;
+        }
+    </style>
 
     <h1>Emotion Project index.html in src folder</h1>
     <h2>by Tessa Eagle, John Diez, and Montana Fowler</h2>
     <h3>CMPM202 - UC Santa Cruz - Winter 2020</h3>
 
     <h4>1. Upload Image</h4>
-    <form action="\facifier\image\">
-        <label for="myfile">Select a file:</label>
-        <input type="file" id="myfile" name="myfile"><br><br>
-        <input type="submit">
-    </form>
     <form action={{ url_for('startFacifier') }} method="post">
          <input type="text" name="imageNameInput">
          <input type="submit">
      </form>
 
-    <script>
-        var formElements = new Array();
-        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-            formElements.push(value);
-        });
-        console.log("formElements: " + formElements);
-
-    </script>
-
-    <input id="submitbutton" type="submit" value="Test Send Data">
-    <!----------------------------------->
-    <script type="text/javascript">
-
-        function runPyScript(input) {
-            var formElements = new Array();
-            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-                formElements.push(value);
-            });
-            console.log("formElements: " + formElements);
-
-            var urlString = ".\facifier.py" //--image " + formElements[0];
-            console.log("urlString: " + urlString)
-            var jqXHR = $.ajax({
-                type: "GET",
-                url: urlString,
-                async: false,
-                data: { mydata: input },
-                success: function (response) {
-                    // here you do whatever you want with the response variable
-                    console.log("success function")
-                }
-            });
-
-            return jqXHR.responseText;
-        }
-
-        $('#submitbutton').click(function () {
-            datatosend = 'this is my matrix';
-            result = runPyScript(datatosend);
-            console.log('Got back ' + result);
-        });
-
-    </script>
-
     <div id="gallery"></div>
     <h4>2. Detect Emotions</h4>
-    <div id="emotionsDetected">emotions detected image</div>
+    <div id="emotionsDetected">
+        <img src="data:image/jpg;base64,{{data}}" />
+    </div>
 
     <h4>3. Provide Art associated with your emotions</h4>
-    <div id="emotionalArt">emotional art div</div>
+    <div id="emotionalArt">
+        {% for art in artImages %}
+        <img src="{{ art }}"></img>
+        {% endfor %}
+    </div>
 
     <h4>4. Provide Tweet associated with your emotions</h4>
     <div id="tweet">tweet div</div>

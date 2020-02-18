@@ -14,7 +14,7 @@ import csv
 
 
 ESC = 27
-INDEX_DICT = {'happy':0, 'sad':0, 'angry':0, 'afraid':0, 'neutral':0, 'surprised':0, 'disgust':0}
+INDEX_DICT = {'happy':0, 'sad':0, 'angry':0, 'afraid':0, 'neutral':0, 'surprised':0, 'disgust':0, 'tweet':0}
 
 def start_webcam(model_emotion, model_gender, window_size, window_name='live', update_time=50):
     cv2.namedWindow(window_name, WINDOW_NORMAL)

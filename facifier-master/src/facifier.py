@@ -197,4 +197,3 @@ def startFacifier():
     else:
         print("Invalid input, exiting program.")
     return render_template("index.html", data=data.decode('utf8'), artImages=artImages, text=text, emotion=emotion)
-
